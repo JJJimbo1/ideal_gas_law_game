@@ -1,40 +1,59 @@
-// disable console on windows for release builds
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use bevy::prelude::{App, ClearColor, Color, Msaa, NonSend, WindowDescriptor};
-use bevy::window::WindowId;
-use bevy::winit::WinitWindows;
-use bevy::DefaultPlugins;
-use bevy_game::GamePlugin;
-use std::io::Cursor;
-use winit::window::Icon;
+use bevy::{prelude::*, gltf::Gltf};
+
+mod constants;
+mod gas;
+mod utility;
+mod balloon;
+
+pub use constants::*;
+pub use gas::*;
+pub use utility::*;
+pub use balloon::*;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum GameState {
+    Balloon,
+    AluminumDrum,
+    VacuumChamber,
+}
+
 
 fn main() {
     App::new()
-        .insert_resource(Msaa { samples: 1 })
-        .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
-        .insert_resource(WindowDescriptor {
-            width: 800.,
-            height: 600.,
-            title: "Bevy game".to_string(), // ToDo
-            canvas: Some("#bevy".to_owned()),
-            ..Default::default()
-        })
+        .insert_resource(ClearColor(CLEAR_COLOR))
+        // .insert_resource(Msaa { samples: 4 })
         .add_plugins(DefaultPlugins)
-        .add_plugin(GamePlugin)
-        .add_startup_system(set_window_icon)
+        .add_plugin(BalloonPlugin)
+        .add_startup_system(create_camera)
+
+        .insert_resource(Random::<WichmannHill>::seeded(0.254623))
+        // .add_startup_system(create_splash_screen)
         .run();
 }
 
-// Sets the icon on windows and X11
-fn set_window_icon(windows: NonSend<WinitWindows>) {
-    let primary = windows.get_window(WindowId::primary()).unwrap();
-    let icon_buf = Cursor::new(include_bytes!("../assets/textures/app_icon.png"));
-    if let Ok(image) = image::load(icon_buf, image::ImageFormat::Png) {
-        let image = image.into_rgba8();
-        let (width, height) = image.dimensions();
-        let rgba = image.into_raw();
-        let icon = Icon::from_rgba(rgba, width, height).unwrap();
-        primary.set_window_icon(Some(icon));
-    };
+pub fn create_camera(
+    mut commands: Commands,
+) {
+    commands.spawn(PointLightBundle {
+        point_light: PointLight {
+            intensity: 5000.0,
+            ..default()
+        },
+        transform: Transform::from_translation(Vec3::new(0.0, 10.0, 10.0)),
+        ..default()
+    });
+
+    commands.spawn(Camera3dBundle {
+        transform: Transform::from_translation(Vec3::new(0.3, 0.3, 0.3) * 15.0)
+            .looking_at(Vec3::new(0.0, 1.0, 0.0), Vec3::Y),
+        ..default()
+    });
+}
+
+#[test]
+fn atest() {
+    use crate::gas::*;
+    let gas = GasContainer::new_volume(4.19);
+    println!("{} | {}", gas.cubic_meters , gas.moles);
 }
