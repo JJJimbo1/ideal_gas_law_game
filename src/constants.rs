@@ -10,7 +10,9 @@ lazy_static! {
     pub static ref ASSET_DIRECTORY : String = format!("{}{}", *PROJECT_ROOT_DIRECTORY, "/assets/");
 }
 
-pub static CLEAR_COLOR: Color = Color::rgba_linear(0.0, 0.15, 0.5, 1.0);
+
+pub static LOADING_CLEAR_COLOR: Color = Color::rgba_linear(0.1, 0.1, 0.1, 1.0);
+pub static CLEAR_COLOR: Color = Color::rgba_linear(0.2, 0.25, 0.4, 1.0);
 
 ////!---UI---!\\\\
 
@@ -20,7 +22,7 @@ pub static CLEAR_COLOR: Color = Color::rgba_linear(0.0, 0.15, 0.5, 1.0);
 // pub static PRIMARY_MENU_MARGIN: f32 = 0.0;
 // pub static SECONDARY_MENU_MARGIN: f32 = PRIMARY_MENU_MARGIN + MENU_WIDTH;
 
-// pub static DARK_BACKGROUND_COLOR: Color = Color::rgba_linear(0.1, 0.1, 0.1, 1.0);
+pub static DARK_BACKGROUND_COLOR: Color = Color::rgba_linear(0.1, 0.1, 0.1, 1.0);
 // pub static LIGHT_BACKGROUND_COLOR: Color = Color::rgba_linear(0.6, 0.6, 0.6, 1.0);
 // pub static BLACK: Color = Color::rgba_linear(0.0, 0.0, 0.0, 1.0);
 // pub static GREEN: Color = Color::rgba_linear(0.0, 1.0, 0.0, 1.0);

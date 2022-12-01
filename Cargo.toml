@@ -6,14 +6,19 @@ edition = "2021"
 exclude = ["dist", "build", "assets", "credits"]
 
 [profile.dev.package."*"]
-opt-level = 3
+opt-level = 'z'
+# codegen-units = 1
+# strip = true
+
 
 [profile.dev]
 opt-level = 1
 
 [profile.release]
-lto = true
-codegen-units = 1
+opt-level = 'z'
+# lto = true
+# codegen-units = 1
+# strip = true
 
 [features]
 dev = [
@@ -21,23 +26,14 @@ dev = [
 ]
 
 [dependencies]
-bevy = { version = "0.9", default-features = false, features = [
-  "animation",
-  "bevy_asset",
-  "bevy_audio",
-#   "bevy_gilrs",
-  "bevy_scene",
-  "bevy_winit",
-  "render",
-  "png",
-#   "hdr",
-  "vorbis",
-#   "x11",
-#   "filesystem_watcher",
-] }
+bevy = "0.9.0"
+bevy_rapier3d = "0.19.0"
 bevy_kira_audio = { version = "0.13" }
 bevy_asset_loader = { version = "0.14.1" }
+# log = "0.4.17"
+# log = "0.4"
 lazy_static = "1.4.0"
+thousands = "0.2.0"
 rand = { version = "0.8.3" }
 
 # keep the following in sync with Bevy's dependencies
