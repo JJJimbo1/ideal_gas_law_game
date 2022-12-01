@@ -14,7 +14,7 @@ pub mod sphere {
 pub mod cylinder {
     use std::f32::consts::PI;
     
-    pub fn volume_from_radius_and_height(radius: f32, height: f32) -> f32 {
-        PI * radius.powf(2.0) * height
+    pub fn liters_from_radius_and_height(radius: f32, height: f32) -> f32 {
+        PI * radius.powf(2.0) * height * 1000.0
     }
 }

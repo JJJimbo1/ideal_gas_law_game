@@ -58,7 +58,7 @@ impl ContainerUI {
                     ..Default::default()
                 },
                 text: Text::from_section(
-                    "Volume (Cubic Meters) : 1.5708",
+                    "Volume (Liters) : 1.5708",
                     TextStyle {
                         font : font.clone(),
                         font_size,
@@ -145,7 +145,7 @@ impl ContainerUI {
                     ..Default::default()
                 },
                 text: Text::from_section(
-                    "Pressure (Pa): 101,325",
+                    "Pressure (Atm): 101,325",
                     TextStyle {
                         font : font.clone(),
                         font_size,
@@ -172,7 +172,7 @@ impl ContainerUI {
                     ..Default::default()
                 },
                 text: Text::from_section(
-                    "Hold Shift and/or\nCtrl to slow down",
+                    "Hold Shift and/or\nCtrl to slow down\nHold alt to speed up",
                     TextStyle {
                         font : font.clone(),
                         font_size,
@@ -200,16 +200,16 @@ pub fn container_menu_update(
 ) {
 
     if let Ok(mut text) = texts.get_mut(menu.volume) {
-        text.sections[0].value = format!("Volume (Cubic Meters): {}", container.cubic_meters);
+        text.sections[0].value = format!("Volume (Liters): {}", container.liters);
     }
     if let Ok(mut text) = texts.get_mut(menu.temperature) {
-        text.sections[0].value = format!("Temperature (Kelvin): {}", container.temperature);
+        text.sections[0].value = format!("Temperature (Kelvin): {}", container.kelvin);
     }
     if let Ok(mut text) = texts.get_mut(menu.moles) {
         text.sections[0].value = format!("Moles: {}", container.moles);
     }
     if let Ok(mut text) = texts.get_mut(menu.pressure) {
         let s = ((container.calculate_pressure() * 10000.0).round() / 10000.0).to_string().separate_with_commas();
-        text.sections[0].value = format!("Pressure (Pa): {}", s);
+        text.sections[0].value = format!("Pressure (Atm): {}", s);
     }
 }

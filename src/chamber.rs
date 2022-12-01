@@ -144,7 +144,7 @@ fn setup_chamber(
 
 
     commands.insert_resource(ClearColor(CLEAR_COLOR));
-    commands.insert_resource(GasContainer::new_volume(1.5708));
+    commands.insert_resource(GasContainer::new_volume(1570.8));
     let handle = audio.play(audio_assets.gas.clone()).looped().with_volume(0.3).handle();
     commands.insert_resource(GasAudio(handle));
 }
@@ -168,12 +168,13 @@ fn update_chamber(
         let Ok(button) = buttons.get(entity) else { return; };
         let shift: f32 = if input_keys.pressed(KeyCode::LShift) || input_keys.pressed(KeyCode::RShift) { 0.1 } else { 1.0 };
         let ctrl: f32 = if input_keys.pressed(KeyCode::LControl) || input_keys.pressed(KeyCode::RControl) { 0.01 } else { 1.0 };
-        let slow = shift * ctrl;
+        let alt: f32 = if input_keys.pressed(KeyCode::LAlt) || input_keys.pressed(KeyCode::RAlt) { 10.0 } else { 1.0 };
+        let slow = shift * ctrl * alt;
         match button {
             VacuumButton::PlungerUp => { plunger_events.send(PlungerEvent((0.01 * slow).max(0.0001))); },
             VacuumButton::PlungerDown => { plunger_events.send(PlungerEvent((-0.01 * slow).min(-0.0001))); },
-            VacuumButton::HeatUp => { heat_events.send(HeatEvent((0.5 * slow).max(0.0001))); },
-            VacuumButton::HeatDown => { heat_events.send(HeatEvent((-0.5 * slow).min(-0.0001))); },
+            VacuumButton::HeatUp => { heat_events.send(HeatEvent((1.0 * slow).max(0.0001))); },
+            VacuumButton::HeatDown => { heat_events.send(HeatEvent((-1.0 * slow).min(-0.0001))); },
             VacuumButton::GasUp => {gas_events.send(GasEvent((0.5 * slow).max(0.0001))); },
             VacuumButton::GasDown => {gas_events.send(GasEvent((-0.5 * slow).min(-0.0001))); },
         }
@@ -209,7 +210,7 @@ fn process_events(
             visibility.is_visible = true;
             light.color = Color::rgba(0.15, 0.45, 1.0, 1.0);
         }
-        gas_container.temperature += event.0;
+        gas_container.kelvin += event.0;
     }
 
     *playing = false;
@@ -226,8 +227,8 @@ fn process_events(
         instance.pause(AudioTween::default());
     }
 
-    gas_container.cubic_meters = (shapes::cylinder::volume_from_radius_and_height(0.5, transform.translation.y - 0.575) * 10000.0).round() / 10000.0;
-    gas_container.temperature = (gas_container.temperature.clamp(0.5, 1000.0) * 10000.0).round() / 10000.0;
+    gas_container.liters = (shapes::cylinder::liters_from_radius_and_height(0.5, transform.translation.y - 0.575) * 10000.0).round() / 10000.0;
+    gas_container.kelvin = (gas_container.kelvin.clamp(1.0, 1000.0) * 10000.0).round() / 10000.0;
     gas_container.moles = (gas_container.moles.clamp(0.5, 350.0) * 10000.0).round() / 10000.0;
 }
 
