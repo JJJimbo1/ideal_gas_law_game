@@ -171,8 +171,8 @@ fn update_chamber(
         let alt: f32 = if input_keys.pressed(KeyCode::LAlt) || input_keys.pressed(KeyCode::RAlt) { 10.0 } else { 1.0 };
         let slow = shift * ctrl * alt;
         match button {
-            VacuumButton::PlungerUp => { plunger_events.send(PlungerEvent((0.01 * slow).max(0.0001))); },
-            VacuumButton::PlungerDown => { plunger_events.send(PlungerEvent((-0.01 * slow).min(-0.0001))); },
+            VacuumButton::PlungerUp => { plunger_events.send(PlungerEvent((0.001 * slow).max(0.000001))); },
+            VacuumButton::PlungerDown => { plunger_events.send(PlungerEvent((-0.001 * slow).min(-0.000001))); },
             VacuumButton::HeatUp => { heat_events.send(HeatEvent((1.0 * slow).max(0.0001))); },
             VacuumButton::HeatDown => { heat_events.send(HeatEvent((-1.0 * slow).min(-0.0001))); },
             VacuumButton::GasUp => {gas_events.send(GasEvent((0.5 * slow).max(0.0001))); },
@@ -198,7 +198,7 @@ fn process_events(
     let mut transform = plungers.single_mut();
     for event in plunger_events.iter() {
         transform.translation.y += event.0;
-        transform.translation.y = (transform.translation.y.clamp(0.775, 2.575) * 10000.0).round() / 10000.0;
+        transform.translation.y = (transform.translation.y.clamp(0.775, 2.575) * 10000000.0).round() / 10000000.0;
     }
     let (mut visibility, mut light) = lights.single_mut();
     visibility.is_visible = false;

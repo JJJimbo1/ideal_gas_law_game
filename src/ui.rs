@@ -172,10 +172,37 @@ impl ContainerUI {
                     ..Default::default()
                 },
                 text: Text::from_section(
-                    "Hold Shift and/or\nCtrl to slow down\nHold alt to speed up",
+                    "Shift/Ctrl to slow down\nAlt to speed up",
                     TextStyle {
                         font : font.clone(),
                         font_size,
+                        color: Color::WHITE,
+                    },
+                ),
+                visibility : Visibility { is_visible : true},
+                ..Default::default()
+            });
+        });
+
+        entity_commands.with_children(|parent| {
+            // text
+            parent.spawn(TextBundle {
+                style: Style {
+                    position_type : PositionType::Absolute,
+                    position: UiRect {
+                        bottom : Val::Px(10.0),
+                        right: Val::Px(10.0),
+                        // top: Val::Px(0.0),
+                        ..Default::default()
+                    },
+                    //margin: UiRect::all(Val::Px(5.0)),
+                    ..Default::default()
+                },
+                text: Text::from_section(
+                    "Created by Alten Reeves",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: 16.0,
                         color: Color::WHITE,
                     },
                 ),
